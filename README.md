@@ -197,6 +197,32 @@ curl 'http://0.0.0.0:4000/key/generate' \
 }
 ```
 
+### Enable SSL for Local Dev
+
+#### Self-signed cert creation on macOS and Linux ####
+
+1. Open a terminal and `cd` to the litellm folder containing `docker-compose.yml`.
+
+2. Run `mkcert --cert-file openai.local.pem --key-file openai.local.pem openai.local`
+
+3. macOS users will also need to run `brew install mkcert` (assuming `brew` is installed) as `mkcert` does not ship with macOS.
+
+4. On macOS run `mkcert -install` to install the cert in the keychain to avoid CA warnings.
+
+#### Update hosts file for local development
+
+1. To use SSL to send API requests to litllm you need to edit your hosts file with the domain the SSL cert is for:
+
+```
+sudo nano /etc/hosts
+```
+
+2. Add an entry as follows:
+
+```
+127.0.0.1 openai.local
+```
+
 ## Supported Providers ([Docs](https://docs.litellm.ai/docs/providers))
 
 | Provider                                                                            | [Completion](https://docs.litellm.ai/docs/#basic-usage) | [Streaming](https://docs.litellm.ai/docs/completion/stream#streaming-responses) | [Async Completion](https://docs.litellm.ai/docs/completion/stream#async-completion) | [Async Streaming](https://docs.litellm.ai/docs/completion/stream#async-streaming) | [Async Embedding](https://docs.litellm.ai/docs/embedding/supported_embedding) | [Async Image Generation](https://docs.litellm.ai/docs/image_generation) |

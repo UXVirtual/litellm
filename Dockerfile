@@ -70,4 +70,4 @@ EXPOSE 4000/tcp
 ENTRYPOINT ["litellm"]
 
 # Append "--detailed_debug" to the end of CMD to view detailed debug logs 
-CMD ["--port", "4000"]
+CMD ["--port", "4000", "--num_workers", "1", "--api_base", "http://localhost:11434", "--model", "ollama_chat/llama3", "--drop_params", "--telemetry", "false" ]

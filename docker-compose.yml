@@ -6,11 +6,36 @@ services:
       args:
         target: runtime
     image: ghcr.io/berriai/litellm:main-latest
+    extra_hosts:
+      - host.docker.internal:host-gateway
+      - openai.local:host-gateway
     ports:
       - "4000:4000" # Map the container port to the host, change the host port if necessary
     volumes:
-      - ./litellm-config.yaml:/app/config.yaml # Mount the local configuration file
+      - ./openai.local.crt:/app/openai.local.crt
+      - ./openai.local.key:/app/openai.local.key
     # You can change the port or number of workers as per your requirements or pass any new supported CLI augument. Make sure the port passed here matches with the container port defined above in `ports` value
-    command: [ "--config", "/app/config.yaml", "--port", "4000", "--num_workers", "8" ]
+    command:
+      [
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "4000",
+        "--ssl_keyfile_path",
+        "./openai.local.key",
+        "--ssl_certfile_path",
+        "./openai.local.crt",
+        "--num_workers",
+        "8",
+        "--detailed_debug",
+        "--drop_params",
+        "--api_base",
+        "http://host.docker.internal:11434",
+        "--model",
+        "ollama_chat/llama3",
+        "--drop_params",
+        "--telemetry",
+        "false"
+      ]
 
 # ...rest of your docker-compose config if any
